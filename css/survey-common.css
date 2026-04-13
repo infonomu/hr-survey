@@ -233,12 +233,12 @@ footer { background: var(--text); color: rgba(255,255,255,0.4); padding: 32px 40
   }
 
   .likert-table td:not(:first-child) {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     padding: 6px 0;
     border: none;
-    width: auto;
+    width: 100%;
     text-align: left;
   }
 
@@ -246,6 +246,7 @@ footer { background: var(--text); color: rgba(255,255,255,0.4); padding: 32px 40
   .likert-table td:not(:first-child)::after {
     font-size: 12.5px;
     color: var(--text-muted);
+    white-space: nowrap;
   }
   .likert-table td:nth-child(2)::after { content: '① 전혀 아님'; }
   .likert-table td:nth-child(3)::after { content: '② 그렇지 않다'; }
@@ -304,29 +305,29 @@ footer { background: var(--text); color: rgba(255,255,255,0.4); padding: 32px 40
   }
 
   .adoption-table td:not(:first-child) {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     padding: 6px 0;
     border: none;
-    width: auto;
+    width: 100%;
     text-align: left;
   }
 
   /* 도입 여부 라벨 */
-  .adoption-table td:nth-child(2)::after { content: '예 (도입함)'; font-size: 12.5px; color: var(--success); font-weight: 600; }
-  .adoption-table td:nth-child(3)::after { content: '아니오 (미도입)'; font-size: 12.5px; color: var(--text-muted); }
+  .adoption-table td:nth-child(2)::after { content: '예 (도입함)'; font-size: 12.5px; color: var(--success); font-weight: 600; white-space: nowrap; }
+  .adoption-table td:nth-child(3)::after { content: '아니오 (미도입)'; font-size: 12.5px; color: var(--text-muted); white-space: nowrap; }
 
   /* 도입여부와 활용빈도 사이 구분 */
   .adoption-table td:nth-child(3) { margin-bottom: 8px; }
   .adoption-table td:nth-child(4)::before { content: '활용 빈도: '; font-size: 11px; color: var(--navy); font-weight: 600; display: block; width: 100%; margin-bottom: 2px; }
 
   /* 활용 빈도 라벨 */
-  .adoption-table td:nth-child(4)::after { content: '① 거의 안 씀'; font-size: 12.5px; color: var(--text-muted); }
-  .adoption-table td:nth-child(5)::after { content: '② 가끔 (월1~2회)'; font-size: 12.5px; color: var(--text-muted); }
-  .adoption-table td:nth-child(6)::after { content: '③ 정기적 (주1회)'; font-size: 12.5px; color: var(--text-muted); }
-  .adoption-table td:nth-child(7)::after { content: '④ 자주 (주3회+)'; font-size: 12.5px; color: var(--text-muted); }
-  .adoption-table td:nth-child(8)::after { content: '⑤ 완전 정착'; font-size: 12.5px; color: var(--text-muted); }
+  .adoption-table td:nth-child(4)::after { content: '① 거의 안 씀'; font-size: 12.5px; color: var(--text-muted); white-space: nowrap; }
+  .adoption-table td:nth-child(5)::after { content: '② 가끔 (월1~2회)'; font-size: 12.5px; color: var(--text-muted); white-space: nowrap; }
+  .adoption-table td:nth-child(6)::after { content: '③ 정기적 (주1회)'; font-size: 12.5px; color: var(--text-muted); white-space: nowrap; }
+  .adoption-table td:nth-child(7)::after { content: '④ 자주 (주3회+)'; font-size: 12.5px; color: var(--text-muted); white-space: nowrap; }
+  .adoption-table td:nth-child(8)::after { content: '⑤ 완전 정착'; font-size: 12.5px; color: var(--text-muted); white-space: nowrap; }
 
   .adoption-table input[type="radio"] { width: 18px; height: 18px; }
 

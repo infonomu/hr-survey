@@ -541,6 +541,34 @@ function initSurvey(source, options) {
     return valid;
   });
 
+  // HRM 공식화 척도 선택 시 응답 기준 설명 표시
+  const hrmScaleDesc = {
+    '1': '해당 관행이 전혀 없음',
+    '2': '사업주·경영자가 그때그때 개인 판단으로 운영 (비공식·비일관)',
+    '3': '일관된 방식은 있으나 문서화되어 있지 않음 (비공식·일관)',
+    '4': '일부 문서화되어 있으나 완전하지 않음 (부분 공식화)',
+    '5': '서면 규정·매뉴얼로 완전히 문서화되어 체계적으로 운영 (완전 공식화)'
+  };
+
+  document.querySelectorAll('.q-block[data-likert^="hrm_"]').forEach(block => {
+    block.querySelectorAll('tbody tr').forEach(row => {
+      // 설명 표시 영역 추가
+      const descEl = document.createElement('div');
+      descEl.className = 'hrm-scale-desc';
+      descEl.style.cssText = 'display:none; font-size:12px; color:var(--navy-light); background:rgba(184,151,46,0.08); border-left:3px solid var(--gold); padding:6px 12px; margin-top:6px; line-height:1.6;';
+      row.querySelector('td:first-child').appendChild(descEl);
+
+      row.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          if (this.checked && hrmScaleDesc[this.value]) {
+            descEl.textContent = '→ ' + hrmScaleDesc[this.value];
+            descEl.style.display = 'block';
+          }
+        });
+      });
+    });
+  });
+
   // source를 데이터에 포함
   survey.registerCollector('source', () => ({ _source: source }));
 

@@ -390,6 +390,15 @@ function renderSurveyForm() {
         <strong>③ 스타벅스 커피 쿠폰</strong> → 입력하신 <strong>휴대폰(카카오톡)</strong>으로 발송<br><br>
         문의사항이 있으시면 <span id="contactEmail"></span> 으로 연락 주시기 바랍니다.
       </div>
+      <div style="margin-top:28px; background:var(--cream); border:1px solid var(--border); padding:24px 28px; text-align:center;">
+        <p style="font-size:15px; font-weight:600; color:var(--navy); margin-bottom:6px;">주변 기업의 대표님 또는 인사담당자님께<br>이 설문을 소개해 주세요!</p>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">더 많은 참여가 소기업 HR 발전에 큰 힘이 됩니다.</p>
+        <div style="display:flex; align-items:center; gap:8px; max-width:420px; margin:0 auto;">
+          <input type="text" id="shareUrl" readonly style="flex:1; padding:10px 14px; border:1px solid var(--border); background:var(--white); font-size:13px; color:var(--text); border-radius:2px; cursor:text;">
+          <button onclick="copyShareUrl()" id="copyBtn" style="background:var(--navy); color:var(--white); border:none; padding:10px 20px; font-family:'Noto Sans KR',sans-serif; font-size:13px; font-weight:600; cursor:pointer; border-radius:2px; white-space:nowrap; transition:all 0.2s;">URL 복사</button>
+        </div>
+        <p id="copyConfirm" style="font-size:12px; color:var(--success); margin-top:8px; display:none;">복사되었습니다!</p>
+      </div>
     </div>
 
   </div>
@@ -463,6 +472,27 @@ function initSurvey(source, options) {
   const contactEmailEl = document.getElementById('contactEmail');
   if (contactInfoEl) contactInfoEl.textContent = contactName + ' (' + contactEmail + ')';
   if (contactEmailEl) contactEmailEl.textContent = contactEmail;
+
+  // 공유 URL 설정
+  const shareUrlEl = document.getElementById('shareUrl');
+  if (shareUrlEl) shareUrlEl.value = window.location.href;
+
+  // URL 복사 함수
+  window.copyShareUrl = function() {
+    const url = document.getElementById('shareUrl');
+    const btn = document.getElementById('copyBtn');
+    const confirm = document.getElementById('copyConfirm');
+    if (url) {
+      navigator.clipboard.writeText(url.value).then(function() {
+        if (btn) { btn.textContent = '복사 완료!'; btn.style.background = 'var(--success)'; }
+        if (confirm) confirm.style.display = 'block';
+        setTimeout(function() {
+          if (btn) { btn.textContent = 'URL 복사'; btn.style.background = 'var(--navy)'; }
+          if (confirm) confirm.style.display = 'none';
+        }, 3000);
+      });
+    }
+  };
 
   // 커피쿠폰만 제공하는 경우: 보고서 관련 문구 교체
   if (opts.couponOnly) {

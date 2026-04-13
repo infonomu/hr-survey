@@ -198,12 +198,138 @@ footer { background: var(--text); color: rgba(255,255,255,0.4); padding: 32px 40
 /* ── Responsive ── */
 @media (max-width: 680px) {
   .about-grid { grid-template-columns: 1fr; }
-  .reward-grid { grid-template-columns: 1fr; }
-  header, .hero, .section, .survey-section { padding-left: 20px; padding-right: 20px; }
-  .hero { padding: 60px 20px 70px; }
+  .reward-grid { grid-template-columns: 1fr !important; }
+  header, .hero, .section, .survey-section { padding-left: 16px; padding-right: 16px; }
+  .hero { padding: 50px 16px 60px; }
   .cta-row { flex-direction: column; align-items: flex-start; }
   .hero-benefits { flex-direction: column; }
-  .likert-table, .adoption-table { font-size: 11.5px; }
-  .likert-table td:first-child { width: 42%; }
-  .adoption-table th:first-child { width: 35%; }
+  .q-block { padding: 16px; }
+  .survey-page-header { padding: 16px 20px; }
+
+  /* ── Likert table → 카드형 세로 레이아웃 ── */
+  .likert-table thead { display: none; }
+  .likert-table,
+  .likert-table tbody,
+  .likert-table tr,
+  .likert-table td { display: block; width: 100%; }
+
+  .likert-table tr {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .likert-table tr:nth-child(even) td { background: transparent; }
+
+  .likert-table td:first-child {
+    width: 100%;
+    text-align: left;
+    padding: 0 0 10px 0;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--navy);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 10px;
+  }
+
+  .likert-table td:not(:first-child) {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 0;
+    border: none;
+    width: auto;
+    text-align: left;
+  }
+
+  /* 라디오 버튼 옆에 척도 라벨 표시 */
+  .likert-table td:not(:first-child)::after {
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+  .likert-table td:nth-child(2)::after { content: '① 전혀 아님'; }
+  .likert-table td:nth-child(3)::after { content: '② 그렇지 않다'; }
+  .likert-table td:nth-child(4)::after { content: '③ 보통'; }
+  .likert-table td:nth-child(5)::after { content: '④ 그렇다'; }
+  .likert-table td:nth-child(6)::after { content: '⑤ 매우 그렇다'; }
+
+  /* HRM 공식화 테이블용 라벨 (data-likert 속성으로 구분) */
+  .q-block[data-likert="hrm_r"] .likert-table td:nth-child(2)::after,
+  .q-block[data-likert="hrm_a"] .likert-table td:nth-child(2)::after,
+  .q-block[data-likert="hrm_c"] .likert-table td:nth-child(2)::after,
+  .q-block[data-likert="hrm_t"] .likert-table td:nth-child(2)::after { content: '① 없음'; }
+  .q-block[data-likert="hrm_r"] .likert-table td:nth-child(3)::after,
+  .q-block[data-likert="hrm_a"] .likert-table td:nth-child(3)::after,
+  .q-block[data-likert="hrm_c"] .likert-table td:nth-child(3)::after,
+  .q-block[data-likert="hrm_t"] .likert-table td:nth-child(3)::after { content: '② 비공식·비일관'; }
+  .q-block[data-likert="hrm_r"] .likert-table td:nth-child(4)::after,
+  .q-block[data-likert="hrm_a"] .likert-table td:nth-child(4)::after,
+  .q-block[data-likert="hrm_c"] .likert-table td:nth-child(4)::after,
+  .q-block[data-likert="hrm_t"] .likert-table td:nth-child(4)::after { content: '③ 비공식·일관'; }
+  .q-block[data-likert="hrm_r"] .likert-table td:nth-child(5)::after,
+  .q-block[data-likert="hrm_a"] .likert-table td:nth-child(5)::after,
+  .q-block[data-likert="hrm_c"] .likert-table td:nth-child(5)::after,
+  .q-block[data-likert="hrm_t"] .likert-table td:nth-child(5)::after { content: '④ 부분 공식화'; }
+  .q-block[data-likert="hrm_r"] .likert-table td:nth-child(6)::after,
+  .q-block[data-likert="hrm_a"] .likert-table td:nth-child(6)::after,
+  .q-block[data-likert="hrm_c"] .likert-table td:nth-child(6)::after,
+  .q-block[data-likert="hrm_t"] .likert-table td:nth-child(6)::after { content: '⑤ 완전 공식화'; }
+
+  .likert-table input[type="radio"] { width: 18px; height: 18px; }
+
+  /* ── Adoption table → 카드형 세로 레이아웃 ── */
+  .adoption-table thead { display: none; }
+  .adoption-table,
+  .adoption-table tbody,
+  .adoption-table tr,
+  .adoption-table td { display: block; width: 100%; }
+
+  .adoption-table tr[data-area] {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  .adoption-table tr:nth-child(even) td { background: transparent; }
+
+  .adoption-table td:first-child {
+    width: 100%;
+    text-align: left;
+    padding: 0 0 10px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 10px;
+  }
+
+  .adoption-table td:not(:first-child) {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 0;
+    border: none;
+    width: auto;
+    text-align: left;
+  }
+
+  /* 도입 여부 라벨 */
+  .adoption-table td:nth-child(2)::after { content: '예 (도입함)'; font-size: 12.5px; color: var(--success); font-weight: 600; }
+  .adoption-table td:nth-child(3)::after { content: '아니오 (미도입)'; font-size: 12.5px; color: var(--text-muted); }
+
+  /* 도입여부와 활용빈도 사이 구분 */
+  .adoption-table td:nth-child(3) { margin-bottom: 8px; }
+  .adoption-table td:nth-child(4)::before { content: '활용 빈도: '; font-size: 11px; color: var(--navy); font-weight: 600; display: block; width: 100%; margin-bottom: 2px; }
+
+  /* 활용 빈도 라벨 */
+  .adoption-table td:nth-child(4)::after { content: '① 거의 안 씀'; font-size: 12.5px; color: var(--text-muted); }
+  .adoption-table td:nth-child(5)::after { content: '② 가끔 (월1~2회)'; font-size: 12.5px; color: var(--text-muted); }
+  .adoption-table td:nth-child(6)::after { content: '③ 정기적 (주1회)'; font-size: 12.5px; color: var(--text-muted); }
+  .adoption-table td:nth-child(7)::after { content: '④ 자주 (주3회+)'; font-size: 12.5px; color: var(--text-muted); }
+  .adoption-table td:nth-child(8)::after { content: '⑤ 완전 정착'; font-size: 12.5px; color: var(--text-muted); }
+
+  .adoption-table input[type="radio"] { width: 18px; height: 18px; }
+
+  /* disabled 상태 시각화 */
+  .adoption-table .freq-radio:disabled { opacity: 0.3; }
 }

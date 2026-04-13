@@ -334,17 +334,17 @@ function renderSurveyForm() {
     <div class="survey-page" data-page="6">
       <div class="survey-page-header">
         <div class="page-num">섹션 06 / 06</div>
-        <h3>보고서 수령 정보</h3>
-        <p>마지막 단계입니다! 보고서와 쿠폰을 받으실 정보를 입력해 주세요.</p>
+        <h3 id="page6Title">보고서 수령 정보</h3>
+        <p id="page6Desc">마지막 단계입니다! 보고서와 쿠폰을 받으실 정보를 입력해 주세요.</p>
       </div>
       <div class="email-section-box">
-        <h4>📬 무료 보고서 및 쿠폰 수령 정보</h4>
-        <p>아래 정보로 ① 무료 노무진단 보고서, ② 고용지원금 안내 보고서를 <strong>이메일</strong>로, ③ 스타벅스 커피 쿠폰을 <strong>카카오톡(휴대폰)</strong>으로 발송해 드립니다.<br>보통 <strong style="color:var(--gold-light)">설문 마감 후 1~2주 이내</strong>에 발송됩니다.</p>
+        <h4 id="page6BoxTitle">📬 무료 보고서 및 쿠폰 수령 정보</h4>
+        <p id="page6BoxDesc">아래 정보로 ① 무료 노무진단 보고서, ② 고용지원금 안내 보고서를 <strong>이메일</strong>로, ③ 스타벅스 커피 쿠폰을 <strong>카카오톡(휴대폰)</strong>으로 발송해 드립니다.<br>보통 <strong style="color:var(--gold-light)">설문 마감 후 1~2주 이내</strong>에 발송됩니다.</p>
 
-        <div style="margin-bottom:14px;">
+        <div style="margin-bottom:14px;" id="emailFieldWrap">
           <label style="display:block; font-size:13px; font-weight:600; color:var(--navy); margin-bottom:6px;">
             📧 이메일 주소 <span style="color:#f87171;">*</span>
-            <span style="font-size:11.5px; font-weight:400; color:var(--text-muted); margin-left:4px;">노무진단 보고서·고용지원금 보고서 수령용</span>
+            <span style="font-size:11.5px; font-weight:400; color:var(--text-muted); margin-left:4px;" id="emailLabel">노무진단 보고서·고용지원금 보고서 수령용</span>
           </label>
           <input type="email" class="q-input" id="emailInput" placeholder="example@company.com" style="margin-bottom:0;">
         </div>
@@ -382,8 +382,8 @@ function renderSurveyForm() {
       <div class="thankyou-icon">✓</div>
       <h2>설문에 참여해 주셔서 감사합니다!</h2>
       <p>귀하의 소중한 응답이 소기업 HR 발전을 위한<br>실증 연구의 토대가 됩니다.</p>
-      <p style="font-size:14px; color:var(--gold); font-weight:600; margin-top:6px;">입력하신 이메일·휴대폰으로 보고서와 쿠폰이 발송됩니다.</p>
-      <div class="thankyou-note">
+      <p style="font-size:14px; color:var(--gold); font-weight:600; margin-top:6px;" id="thankyouSub">입력하신 이메일·휴대폰으로 보고서와 쿠폰이 발송됩니다.</p>
+      <div class="thankyou-note" id="thankyouNote">
         <strong style="color:var(--gold-light)">📋 다음 단계 안내</strong><br><br>
         설문 마감 후 1~2주 이내에<br>
         <strong>① 무료 노무진단 보고서</strong>, <strong>② 고용지원금 안내 보고서</strong> → 입력하신 <strong>이메일</strong>로 발송<br>
@@ -450,6 +450,7 @@ function renderHrmRow(name, text, hint) {
  * @param {object} [options] - 페이지별 옵션
  * @param {string} [options.contactName] - 문의처 이름
  * @param {string} [options.contactEmail] - 문의처 이메일
+ * @param {boolean} [options.couponOnly] - true면 커피쿠폰만 (보고서 혜택 숨김)
  */
 function initSurvey(source, options) {
   const opts = options || {};
@@ -462,6 +463,25 @@ function initSurvey(source, options) {
   const contactEmailEl = document.getElementById('contactEmail');
   if (contactInfoEl) contactInfoEl.textContent = contactName + ' (' + contactEmail + ')';
   if (contactEmailEl) contactEmailEl.textContent = contactEmail;
+
+  // 커피쿠폰만 제공하는 경우: 보고서 관련 문구 교체
+  if (opts.couponOnly) {
+    const page6Title = document.getElementById('page6Title');
+    const page6Desc = document.getElementById('page6Desc');
+    const page6BoxTitle = document.getElementById('page6BoxTitle');
+    const page6BoxDesc = document.getElementById('page6BoxDesc');
+    const emailLabel = document.getElementById('emailLabel');
+    const thankyouSub = document.getElementById('thankyouSub');
+    const thankyouNote = document.getElementById('thankyouNote');
+
+    if (page6Title) page6Title.textContent = '쿠폰 수령 정보';
+    if (page6Desc) page6Desc.textContent = '마지막 단계입니다! 쿠폰을 받으실 정보를 입력해 주세요.';
+    if (page6BoxTitle) page6BoxTitle.textContent = '☕ 스타벅스 쿠폰 수령 정보';
+    if (page6BoxDesc) page6BoxDesc.innerHTML = '스타벅스 아메리카노 쿠폰을 <strong>카카오톡(휴대폰)</strong>으로 발송해 드립니다.<br>보통 <strong style="color:var(--gold-light)">설문 마감 후 1~2주 이내</strong>에 발송됩니다.';
+    if (emailLabel) emailLabel.textContent = '연구 결과 안내용 (선택)';
+    if (thankyouSub) thankyouSub.textContent = '입력하신 휴대폰으로 스타벅스 쿠폰이 발송됩니다.';
+    if (thankyouNote) thankyouNote.innerHTML = '<strong style="color:var(--gold-light)">☕ 다음 단계 안내</strong><br><br>설문 마감 후 1~2주 이내에<br><strong>스타벅스 커피 쿠폰</strong> → 입력하신 <strong>휴대폰(카카오톡)</strong>으로 발송<br><br>문의사항이 있으시면 ' + contactEmail + ' 으로 연락 주시기 바랍니다.';
+  }
 
   const survey = new SurveyCore({
     ...SURVEY_CONFIG,

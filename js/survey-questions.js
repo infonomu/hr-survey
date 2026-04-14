@@ -366,10 +366,13 @@ function renderSurveyForm() {
 
         <div style="margin-bottom:14px;" id="emailFieldWrap">
           <label style="display:block; font-size:13px; font-weight:600; color:var(--navy); margin-bottom:6px;">
-            📧 이메일 주소 <span style="color:#f87171;">*</span>
+            📧 이메일 주소 <span style="font-size:11px; color:var(--text-muted); font-weight:500;">(선택)</span>
             <span style="font-size:11.5px; font-weight:400; color:var(--text-muted); margin-left:4px;" id="emailLabel">노무진단 보고서·고용지원금 보고서 수령용</span>
           </label>
-          <input type="email" class="q-input" id="emailInput" placeholder="example@company.com" style="margin-bottom:0;">
+          <input type="email" class="q-input" id="emailInput" placeholder="example@company.com" style="margin-bottom:6px;">
+          <p style="font-size:11.5px; color:var(--text-muted); line-height:1.6; margin:0;">
+            ※ 노무진단 보고서·고용지원금 안내가 <strong>필요하지 않으시면 입력하지 않으셔도 됩니다.</strong>
+          </p>
         </div>
 
         <div style="margin-bottom:14px;">
@@ -648,8 +651,8 @@ function initSurvey(source, options) {
         errEl.style.display = 'block';
         return false;
       }
-      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        errEl.textContent = '유효한 이메일 주소를 입력해 주세요.';
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errEl.textContent = '이메일 형식이 올바르지 않습니다. (미입력 가능)';
         errEl.style.display = 'block';
         return false;
       }

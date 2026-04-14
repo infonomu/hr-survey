@@ -539,6 +539,21 @@ function initSurvey(source, options) {
     if (thankyouNote) thankyouNote.innerHTML = '<strong style="color:var(--gold-light)">☕ 다음 단계 안내</strong><br><br>설문 마감 후 1~2주 이내에<br><strong>스타벅스 커피 쿠폰</strong> → 입력하신 <strong>휴대폰(카카오톡)</strong>으로 발송<br><br>문의사항이 있으시면 ' + contactEmail + ' 으로 연락 주시기 바랍니다.';
   }
 
+  // 쿠폰 추첨 발송 모드: 커피 쿠폰 관련 문구를 '추첨 당첨자 발송'으로 교체
+  if (opts.couponLottery) {
+    const page6BoxDesc = document.getElementById('page6BoxDesc');
+    const thankyouNote = document.getElementById('thankyouNote');
+    const thankyouSub = document.getElementById('thankyouSub');
+
+    if (page6BoxDesc) {
+      page6BoxDesc.innerHTML = '아래 정보로 ① 무료 노무진단 보고서, ② 고용지원금 안내 보고서를 <strong>이메일</strong>로 발송해 드립니다.<br>③ 스타벅스 커피 쿠폰은 <strong style="color:var(--gold-light)">참여자 중 추첨</strong>을 통해 당첨자께만 <strong>카카오톡(휴대폰)</strong>으로 발송됩니다.<br>보통 <strong style="color:var(--gold-light)">설문 마감 후 1~2주 이내</strong>에 발송됩니다.';
+    }
+    if (thankyouSub) thankyouSub.textContent = '입력하신 이메일로 보고서가 발송되며, 커피 쿠폰은 추첨 후 당첨자께 발송됩니다.';
+    if (thankyouNote) {
+      thankyouNote.innerHTML = '<strong style="color:var(--gold-light)">📋 다음 단계 안내</strong><br><br>설문 마감 후 1~2주 이내에<br><strong>① 무료 노무진단 보고서</strong>, <strong>② 고용지원금 안내 보고서</strong> → 입력하신 <strong>이메일</strong>로 발송<br><strong>③ 스타벅스 커피 쿠폰</strong> → <strong style="color:var(--gold-light)">추첨을 통해 당첨자</strong>께 <strong>휴대폰(카카오톡)</strong>으로 발송<br><br>문의사항이 있으시면 ' + contactEmail + ' 으로 연락 주시기 바랍니다.';
+    }
+  }
+
   const survey = new SurveyCore({
     ...SURVEY_CONFIG,
   });

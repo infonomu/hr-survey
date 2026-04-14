@@ -356,9 +356,12 @@ function renderSurveyForm() {
         <div style="margin-bottom:14px;">
           <label style="display:block; font-size:13px; font-weight:600; color:var(--navy); margin-bottom:6px;">
             🏢 사업자등록번호 <span style="color:#f87171;">*</span>
-            <span style="font-size:11.5px; font-weight:400; color:var(--text-muted); margin-left:4px;">실제 사업자 응답 확인용 (외부 조회·저장 안 함)</span>
+            <span style="font-size:11.5px; font-weight:400; color:var(--text-muted); margin-left:4px;">실제 사업자 응답 확인용</span>
           </label>
-          <input type="text" class="q-input" id="bizRegNumber" placeholder="예: 123-45-67890" maxlength="12" inputmode="numeric" autocomplete="off" style="margin-bottom:0; letter-spacing:1px;">
+          <input type="text" class="q-input" id="bizRegNumber" placeholder="예: 123-45-67890" maxlength="12" inputmode="numeric" autocomplete="off" style="margin-bottom:6px; letter-spacing:1px;">
+          <p style="font-size:11.5px; color:var(--text-muted); line-height:1.6; margin:0;">
+            ※ 허위응답 방지를 위한 <strong>형식(체크섬) 검증만</strong> 수행하며, 외부 기관에 조회하거나 시트에 저장하지 않습니다.
+          </p>
         </div>
 
         <div style="margin-bottom:14px;" id="emailFieldWrap">

@@ -144,10 +144,10 @@ class SurveyCore {
       data[cb.id] = cb.checked ? 'Y' : 'N';
     });
 
-    // Custom collectors
+    // Custom collectors (receive data object for in-place reordering)
     for (const [name, fn] of Object.entries(this.customCollectors)) {
-      const custom = fn();
-      Object.assign(data, custom);
+      const custom = fn(data);
+      if (custom) Object.assign(data, custom);
     }
 
     return data;

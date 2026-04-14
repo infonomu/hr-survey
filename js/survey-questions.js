@@ -20,6 +20,18 @@ const SURVEY_CONFIG = {
   ]
 };
 
+// 사업자등록번호 유효성 검증 (10자리 체크섬)
+function validateBizRegNumber(num) {
+  const digits = String(num).replace(/\D/g, '');
+  if (digits.length !== 10) return false;
+  const weights = [1, 3, 7, 1, 3, 7, 1, 3, 5];
+  let sum = 0;
+  for (let i = 0; i < 9; i++) sum += parseInt(digits[i], 10) * weights[i];
+  sum += Math.floor((parseInt(digits[8], 10) * 5) / 10);
+  const check = (10 - (sum % 10)) % 10;
+  return check === parseInt(digits[9], 10);
+}
+
 /**
  * 설문 폼 전체 HTML을 생성하여 #survey-mount 에 삽입
  */
@@ -341,6 +353,14 @@ function renderSurveyForm() {
         <h4 id="page6BoxTitle">📬 무료 보고서 및 쿠폰 수령 정보</h4>
         <p id="page6BoxDesc">아래 정보로 ① 무료 노무진단 보고서, ② 고용지원금 안내 보고서를 <strong>이메일</strong>로, ③ 스타벅스 커피 쿠폰을 <strong>카카오톡(휴대폰)</strong>으로 발송해 드립니다.<br>보통 <strong style="color:var(--gold-light)">설문 마감 후 1~2주 이내</strong>에 발송됩니다.</p>
 
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-size:13px; font-weight:600; color:var(--navy); margin-bottom:6px;">
+            🏢 사업자등록번호 <span style="color:#f87171;">*</span>
+            <span style="font-size:11.5px; font-weight:400; color:var(--text-muted); margin-left:4px;">실제 사업자 응답 확인용 (외부 조회·저장 안 함)</span>
+          </label>
+          <input type="text" class="q-input" id="bizRegNumber" placeholder="예: 123-45-67890" maxlength="12" inputmode="numeric" autocomplete="off" style="margin-bottom:0; letter-spacing:1px;">
+        </div>
+
         <div style="margin-bottom:14px;" id="emailFieldWrap">
           <label style="display:block; font-size:13px; font-weight:600; color:var(--navy); margin-bottom:6px;">
             📧 이메일 주소 <span style="color:#f87171;">*</span>
@@ -517,6 +537,18 @@ function initSurvey(source, options) {
     ...SURVEY_CONFIG,
   });
 
+  // 사업자등록번호 자동 하이픈 포맷팅 (XXX-XX-XXXXX)
+  const bizInput = document.getElementById('bizRegNumber');
+  if (bizInput) {
+    bizInput.addEventListener('input', function() {
+      const d = this.value.replace(/\D/g, '').slice(0, 10);
+      let formatted = d;
+      if (d.length > 5) formatted = d.slice(0, 3) + '-' + d.slice(3, 5) + '-' + d.slice(5);
+      else if (d.length > 3) formatted = d.slice(0, 3) + '-' + d.slice(3);
+      this.value = formatted;
+    });
+  }
+
   // Page 2: Adoption table 커스텀 검증
   survey.registerValidator(2, function() {
     const areas = ['채용','근태','급여','평가','교육'];
@@ -569,6 +601,30 @@ function initSurvey(source, options) {
     });
   });
 
+  // Adoption table: yn/freq를 항상 일관된 순서로 포함 (시트 컬럼 정렬 고정용)
+  survey.registerCollector('adoption', (data) => {
+    const areas = ['채용','근태','급여','평가','교육'];
+    for (const area of areas) {
+      delete data[`yn_${area}`];
+      delete data[`freq_${area}`];
+    }
+    for (const area of areas) {
+      const yn = document.querySelector(`input[name="yn_${area}"]:checked`);
+      data[`yn_${area}`] = yn ? yn.value : '';
+      const freq = document.querySelector(`input[name="freq_${area}"]:checked`);
+      data[`freq_${area}`] = freq ? freq.value : '';
+    }
+    return null;
+  });
+
+  // 사업자등록번호: 원본은 저장하지 않고 검증 통과 여부만 기록
+  survey.registerCollector('bizreg', (data) => {
+    delete data.bizRegNumber;
+    const input = document.getElementById('bizRegNumber');
+    data.bizRegValid = input && validateBizRegNumber(input.value) ? 'Y' : 'N';
+    return null;
+  });
+
   // source를 데이터에 포함
   survey.registerCollector('source', () => ({ _source: source }));
 
@@ -578,11 +634,17 @@ function initSurvey(source, options) {
   // submit 함수
   window.submitSurvey = function() {
     survey.submitToGoogleSheets(function() {
+      const bizReg = document.getElementById('bizRegNumber').value.trim();
       const email = document.getElementById('emailInput').value.trim();
       const phone = document.getElementById('phoneInput').value.trim().replace(/[-\s]/g, '');
       const consent = document.getElementById('consentCheck').checked;
       const errEl = document.getElementById('emailError');
 
+      if (!validateBizRegNumber(bizReg)) {
+        errEl.textContent = '유효한 사업자등록번호를 입력해 주세요. (10자리 숫자)';
+        errEl.style.display = 'block';
+        return false;
+      }
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         errEl.textContent = '유효한 이메일 주소를 입력해 주세요.';
         errEl.style.display = 'block';

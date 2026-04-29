@@ -638,11 +638,12 @@ function initSurvey(source, options) {
     return null;
   });
 
-  // 사업자등록번호: 원본은 저장하지 않고 검증 통과 여부만 기록
+  // 사업자등록번호: 원본 저장 + 검증 통과 여부 함께 기록 (불량 응답 사후 필터링용)
   survey.registerCollector('bizreg', (data) => {
-    delete data.bizRegNumber;
     const input = document.getElementById('bizRegNumber');
-    data.bizRegValid = input && validateBizRegNumber(input.value) ? 'Y' : 'N';
+    const raw = input ? input.value.trim() : '';
+    data.bizRegNumber = raw;
+    data.bizRegValid = validateBizRegNumber(raw) ? 'Y' : 'N';
     return null;
   });
 
